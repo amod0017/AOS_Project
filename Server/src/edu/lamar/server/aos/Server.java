@@ -3,15 +3,17 @@
  */
 package edu.lamar.server.aos;
 
+import java.io.IOException;
+
 /**
  * @author user
  *
  */
 public class Server extends AbstractServer {
 
+	private int TIME_STAMP = 0;
 	public Server(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -19,8 +21,16 @@ public class Server extends AbstractServer {
 	 */
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		// TODO Auto-generated method stub
-
+		System.out.println("msg: " + msg);
+		sendToAllClients(msg);
+	}
+	public static void main(String[] args) {
+		Server myServer = new Server(5555);
+		try {
+			myServer.listen();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

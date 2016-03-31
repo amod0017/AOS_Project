@@ -3,6 +3,8 @@
  */
 package edu.lamar.client;
 
+import java.io.IOException;
+
 /**
  * @author user
  *
@@ -18,16 +20,20 @@ public class CarClient extends AbstractClient {
 	 */
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		// TODO Auto-generated method stub
-
+		System.out.println(msg);
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		try {
+			CarClient myClient = new CarClient("localhost", 5555);
+			myClient.openConnection();
+			myClient.sendToServer("HI");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
