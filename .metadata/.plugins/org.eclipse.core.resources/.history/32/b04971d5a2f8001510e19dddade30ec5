@@ -1,0 +1,45 @@
+/**
+ * 
+ */
+package edu.lamar.common;
+
+import edu.lamar.common.irp.Message;
+import edu.lamar.common.irp.MessageTypes;
+
+/**
+ * @author user
+ *
+ */
+public class MessageImpl implements Message {
+	final int carId;
+	final int timeStamp;
+	final MessageTypes messageTypes;
+	public public MessageImpl() {
+	}
+	/* (non-Javadoc)
+	 * @see edu.lamar.common.irp.Message#getCarId()
+	 */
+	@Override
+	public int getCarId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.lamar.common.irp.Message#getTimeStamp()
+	 */
+	@Override
+	public int getTimeStamp() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.lamar.common.irp.Message#getMessageType()
+	 */
+	@Override
+	public MessageTypes getMessageType() {
+		return null;
+	}
+
+}
