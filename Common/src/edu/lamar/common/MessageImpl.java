@@ -8,7 +8,6 @@ import edu.lamar.common.irp.MessageTypes;
 
 /**
  * @author user
- *
  */
 public class MessageImpl implements Message {
 	/**
