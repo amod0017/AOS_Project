@@ -1,0 +1,100 @@
+/**
+ * 
+ */
+package edu.lamar.client;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import edu.lamar.common.MessageImpl;
+import edu.lamar.common.irp.Message;
+import edu.lamar.common.irp.MessageTypes;
+
+/**
+ * @author user
+ *
+ */
+public class CarClient extends AbstractClient {
+	boolean hadIrequestedTheBridge = false;
+	int timeStamp = 0;
+	Queue<Integer> queue = new LinkedBlockingQueue<Integer>();
+	int myCarId;
+	Map<Integer, String> carAcknowledgementStatusMap = new HashMap<>();
+	public CarClient(int carId,String host, int port) {
+		super(host, port);
+		myCarId = carId;
+		carAcknowledgementStatusMap.put(1, "NCK");
+		carAcknowledgementStatusMap.put(2, "NCK");
+		carAcknowledgementStatusMap.put(3, "NCK");
+		carAcknowledgementStatusMap.put(4, "NCK");
+	}
+
+	@Override
+	protected void handleMessageFromServer(Object msg) {
+		Message myMessage = ((Message)msg);
+		if(myMessage.getMessageType().equals(MessageTypes.BridgeRequest)){
+			if(hadIrequestedTheBridge){
+				if(timeStamp > myMessage.getTimeStamp()){
+					timeStamp = myMessage.getTimeStamp()+1;
+					try {
+						queue.add(myMessage.getCarId());
+						sendToServer(new MessageImpl(0, timeStamp, MessageTypes.Acknowledge));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			} else{
+				timeStamp = myMessage.getTimeStamp()+1;
+				queue.add(myMessage.getCarId());
+				try {
+					sendToServer(new MessageImpl(0, timeStamp, MessageTypes.Acknowledge));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else if(myMessage.getMessageType().equals(MessageTypes.BridgRelease)){
+			//remove from queue
+			// should be the top car
+			queue.remove();
+		}else{
+			// Acknowledge
+			if(hadIrequestedTheBridge){
+				carAcknowledgementStatusMap.put(myMessage.getCarId(), "ACK");
+			}
+			if(getUpdatedAckStatus(carAcknowledgementStatusMap)){
+				try {
+					sendToServer(new MessageImpl(0, myMessage.getTimeStamp()+1, MessageTypes.OnBridge));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private boolean getUpdatedAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
+		for (Entry<Integer, String> entry : carAcknowledgementStatusMap2.entrySet()){
+			if(entry.getValue().equals("NCK")){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			CarClient myClient = new CarClient("localhost", 5555);
+			myClient.openConnection();
+			myClient.sendToServer("HI");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

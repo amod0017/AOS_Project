@@ -11,6 +11,10 @@ import edu.lamar.common.irp.MessageTypes;
  *
  */
 public class MessageImpl implements Message {
+	/**
+	 * default serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
 	final int carId;
 	final int timeStamp;
 	final MessageTypes messageTypes;

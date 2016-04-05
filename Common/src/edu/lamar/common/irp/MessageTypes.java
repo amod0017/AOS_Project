@@ -10,6 +10,7 @@ package edu.lamar.common.irp;
 public enum MessageTypes {
 	BridgeRequest,
 	BridgRelease,
-	Acknowledge;
+	Acknowledge,
+	OnBridge;
 
 }

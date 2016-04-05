@@ -2,5 +2,12 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="edu.lamar.client.CarClient"/>
 <fullyQualifiedTypeName name="edu.lamar.server.aos.Server"/>
+<fullyQualifiedTypeName name="edu.lamar.common.irp.Message"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="java.util.concurrent.LinkedBlockingQueue"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="edu.lamar.common.MessageImpl"/>
+<fullyQualifiedTypeName name="edu.lamar.common.irp.MessageTypes"/>
+<fullyQualifiedTypeName name="java.util.Scanner"/>
 </qualifiedTypeNameHistroy>

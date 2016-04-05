@@ -1,6 +1,8 @@
 package edu.lamar.common.irp;
 
-public interface Message {
+import java.io.Serializable;
+
+public interface Message extends Serializable{
 
 	int getCarId();
 	int getTimeStamp();

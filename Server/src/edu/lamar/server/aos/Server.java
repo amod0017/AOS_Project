@@ -11,7 +11,6 @@ import java.io.IOException;
  */
 public class Server extends AbstractServer {
 
-	private int TIME_STAMP = 0;
 	public Server(int port) {
 		super(port);
 	}
