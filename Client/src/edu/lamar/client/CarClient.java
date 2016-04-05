@@ -33,8 +33,8 @@ public class CarClient extends AbstractClient {
 		myCarId = carId;
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
-		// carAcknowledgementStatusMap.put(3, "NCK");
-		// carAcknowledgementStatusMap.put(4, "NCK");
+		carAcknowledgementStatusMap.put(3, "NCK");
+		carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class CarClient extends AbstractClient {
 			// remove from queue
 			// should be the top car
 			queue.remove();
-			updateAckStatus(carAcknowledgementStatusMap);
+			resetAckStatus(carAcknowledgementStatusMap);
 		} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 			// Acknowledge
 			if (hadIrequestedTheBridge) {
@@ -90,9 +90,11 @@ public class CarClient extends AbstractClient {
 		}
 	}
 
-	private void updateAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
+	private void resetAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
+		carAcknowledgementStatusMap.put(3, "NCK");
+		carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	private boolean getUpdatedAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
