@@ -33,8 +33,8 @@ public class CarClient extends AbstractClient {
 		myCarId = carId;
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
-		carAcknowledgementStatusMap.put(3, "NCK");
-		carAcknowledgementStatusMap.put(4, "NCK");
+		 carAcknowledgementStatusMap.put(3, "NCK");
+		 carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	@Override
@@ -108,8 +108,8 @@ public class CarClient extends AbstractClient {
 	private void resetAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
-		carAcknowledgementStatusMap.put(3, "NCK");
-		carAcknowledgementStatusMap.put(4, "NCK");
+		// carAcknowledgementStatusMap.put(3, "NCK");
+		// carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	private boolean getUpdatedAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
