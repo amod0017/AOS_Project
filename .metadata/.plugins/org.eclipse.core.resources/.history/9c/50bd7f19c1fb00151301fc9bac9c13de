@@ -69,6 +69,7 @@ public class CarClient extends AbstractClient {
 		} else if (myMessage.getMessageType().equals(MessageTypes.BridgRelease)) {
 			// remove from queue
 			// should be the top car
+			queue.remove();
 			if (onBridge == myCarId) {
 				// if I am on bridge do these things
 				try {
@@ -78,8 +79,6 @@ public class CarClient extends AbstractClient {
 				}
 				resetAckStatus(carAcknowledgementStatusMap);
 				hadIrequestedTheBridge = false;
-			} else {
-				queue.remove();
 			}
 			onBridge = 0;
 

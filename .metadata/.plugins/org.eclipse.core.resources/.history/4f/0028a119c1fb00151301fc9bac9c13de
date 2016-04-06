@@ -78,7 +78,7 @@ public class CarClient extends AbstractClient {
 				}
 				resetAckStatus(carAcknowledgementStatusMap);
 				hadIrequestedTheBridge = false;
-			} else {
+			}else{
 				queue.remove();
 			}
 			onBridge = 0;
