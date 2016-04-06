@@ -33,8 +33,8 @@ public class CarClient extends AbstractClient {
 		myCarId = carId;
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
-		// carAcknowledgementStatusMap.put(3, "NCK");
-		// carAcknowledgementStatusMap.put(4, "NCK");
+		carAcknowledgementStatusMap.put(3, "NCK");
+		carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	@Override
@@ -70,23 +70,15 @@ public class CarClient extends AbstractClient {
 			// remove from queue
 			// should be the top car
 			queue.remove();
-			if (onBridge == myCarId) {
-				// if I am on bridge do these things
-				try {
-					sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-				resetAckStatus(carAcknowledgementStatusMap);
-				hadIrequestedTheBridge = false;
+			hadIrequestedTheBridge = false;
+			try {
+				sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
+			} catch (final IOException e) {
+				e.printStackTrace();
 			}
-			onBridge = 0;
-
+			resetAckStatus(carAcknowledgementStatusMap);
 		} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 			// Acknowledge
-			if (myCarId != 2) {
-				System.out.println("debug Me");
-			}
 			if (hadIrequestedTheBridge) {
 				carAcknowledgementStatusMap.put(myMessage.getCarId(), "ACK");
 			}
@@ -107,8 +99,8 @@ public class CarClient extends AbstractClient {
 	private void resetAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
-		// carAcknowledgementStatusMap.put(3, "NCK");
-		// carAcknowledgementStatusMap.put(4, "NCK");
+		carAcknowledgementStatusMap.put(3, "NCK");
+		carAcknowledgementStatusMap.put(4, "NCK");
 	}
 
 	private boolean getUpdatedAckStatus(Map<Integer, String> carAcknowledgementStatusMap2) {
@@ -142,8 +134,8 @@ public class CarClient extends AbstractClient {
 					if (!myClient.hadIrequestedTheBridge) {
 						System.out.println("Please request the bridge first");
 					} else {
-						myClient.sendToServer(new MessageImpl(myClient.myCarId, myClient.getCurrentTimeStamp(),
-								MessageTypes.BridgRelease));
+						myClient.sendToServer(
+								new MessageImpl(carId, myClient.getCurrentTimeStamp(), MessageTypes.BridgRelease));
 					}
 				} else if (option == 1) {
 					myClient.sendToServer(
