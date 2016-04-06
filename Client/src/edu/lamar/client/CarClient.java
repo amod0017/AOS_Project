@@ -70,6 +70,11 @@ public class CarClient extends AbstractClient {
 			// remove from queue
 			// should be the top car
 			queue.remove();
+			try {
+				sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 			resetAckStatus(carAcknowledgementStatusMap);
 		} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 			// Acknowledge
