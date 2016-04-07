@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item value="getUpdatedAckStatus" key="selection"/>
+		<item value="onBridge" key="selection"/>
 		<list key="findhistory">
+			<item value="OnBridge"/>
+			<item value="onBridge"/>
+			<item value="getCurrentTimeStamp"/>
 			<item value="getUpdatedAckStatus"/>
 		</list>
 	</section>

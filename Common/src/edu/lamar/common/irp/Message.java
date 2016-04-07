@@ -7,4 +7,5 @@ public interface Message extends Serializable{
 	int getCarId();
 	int getTimeStamp();
 	MessageTypes getMessageType();
+	String getDirection();
 }
