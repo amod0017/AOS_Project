@@ -26,7 +26,7 @@ public class CarClient2 extends AbstractClient {
 	private final Queue<Integer> queue = new LinkedBlockingQueue<Integer>();
 	private final int myCarId;
 	private final Map<Integer, String> carAcknowledgementStatusMap = new HashMap<>();
-	private int[] onBridge = { 0, 0 };
+	private int onBridge = 0;
 	private final String myDirection;
 
 	public CarClient2(int carId, String direction, String host, int port) {
