@@ -60,7 +60,11 @@ public class CarClient2 extends AbstractClient {
 					}
 				} else {
 					// my message. I need to send ACK to me.
-					carAcknowledgementStatusMap.put(myCarId, "ACK");
+					try {
+						sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
+					} catch (final IOException e) {
+						e.printStackTrace();
+					}
 				}
 			} else {
 				timeStamp = myMessage.getTimeStamp() + 1;
@@ -90,9 +94,6 @@ public class CarClient2 extends AbstractClient {
 
 		} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 			// Acknowledge
-			if (myCarId != 2) {
-				System.out.println("debug Me");
-			}
 			if (hadIrequestedTheBridge) {
 				carAcknowledgementStatusMap.put(myMessage.getCarId(), "ACK");
 			}
@@ -154,9 +155,9 @@ public class CarClient2 extends AbstractClient {
 								direction, MessageTypes.BridgRelease));
 					}
 				} else if (option == 1) {
+					myClient.hadIrequestedTheBridge = true;
 					myClient.sendToServer(new MessageImpl(carId, myClient.getCurrentTimeStamp(), direction,
 							MessageTypes.BridgeRequest));
-					myClient.hadIrequestedTheBridge = true;
 				} else {
 					break;
 				}

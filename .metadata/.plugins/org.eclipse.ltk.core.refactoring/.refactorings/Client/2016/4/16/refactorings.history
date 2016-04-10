@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;timeStamp&apos; in &apos;edu.lamar.client.CarClient&apos; to &apos;myCurrentTimeStamp&apos;&#x0D;&#x0A;- Original project: &apos;Client&apos;&#x0D;&#x0A;- Original element: &apos;edu.lamar.client.CarClient.timeStamp&apos;&#x0D;&#x0A;- Renamed element: &apos;edu.lamar.client.CarClient.myCurrentTimeStamp&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;timeStamp&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;edu.lamar.client{CarClient.java[CarClient^timeStamp" name="myCurrentTimeStamp" references="true" setter="false" stamp="1460258946144" textual="false" version="1.0"/>
+</session>
