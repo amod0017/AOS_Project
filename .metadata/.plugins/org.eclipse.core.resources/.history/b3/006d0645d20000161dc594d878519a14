@@ -20,7 +20,7 @@ import edu.lamar.common.irp.MessageTypes;
  * @author user
  *
  */
-public class CarClient extends AbstractClient {
+public class CarClient3 extends AbstractClient {
 	private boolean hadIrequestedTheBridge = false;
 	private int myCurrentTimeStamp = 0;
 	private final Queue<Integer> queue = new LinkedBlockingQueue<Integer>();
@@ -29,7 +29,7 @@ public class CarClient extends AbstractClient {
 	private int onBridge = 0;
 	private int timeIrequestedTheBridge = 0;
 
-	public CarClient(int carId, String host, int port) {
+	public CarClient3(int carId, String host, int port) {
 		super(host, port);
 		myCarId = carId;
 		carAcknowledgementStatusMap.put(1, "NCK");
@@ -52,6 +52,7 @@ public class CarClient extends AbstractClient {
 		// }
 		if (myMessage.getMessageType().equals(MessageTypes.BridgeRequest)) {
 			if (hadIrequestedTheBridge) {
+				
 				if (timeIrequestedTheBridge > myMessage.getTimeStamp()) {
 					// myCurrentTimeStamp = myMessage.getTimeStamp() + 1;
 					try {
@@ -157,7 +158,7 @@ public class CarClient extends AbstractClient {
 			final Scanner scanner = new Scanner(new InputStreamReader(System.in));
 			System.out.println("Enter Car Id:");
 			final int carId = scanner.nextInt();
-			final CarClient myClient = new CarClient(carId, "localhost", 5555);
+			final CarClient3 myClient = new CarClient3(carId, "localhost", 5555);
 			myClient.openConnection();
 			System.out.println("Press 1 for bridge request & 2 for bridge release");
 			while (true) {
