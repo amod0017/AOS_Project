@@ -184,7 +184,11 @@ public class MyFrame2 extends JFrame {
 	}
 
 	public void updateOnBridgeLabel(String onBridge) {
-		onBridgeCar.setText(onBridge);
+		if (onBridge != "[]") {
+			onBridgeCar.setText(onBridgeCar.getText() + " " + onBridge);
+		} else {
+			onBridgeCar.setText("C ");
+		}
 		this.repaint();
 	}
 

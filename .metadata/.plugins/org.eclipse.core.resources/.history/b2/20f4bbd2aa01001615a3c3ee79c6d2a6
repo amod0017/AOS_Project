@@ -186,6 +186,6 @@ public class MyFrame2 extends JFrame {
 	public void updateOnBridgeLabel(String onBridge) {
 		onBridgeCar.setText(onBridge);
 		this.repaint();
-	}
+}
 
 }
