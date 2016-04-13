@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 public class CarGui {
 
 	public void displayGUI() {
-		final JFrame frame = new JFrame("Absolute Layout Example");
+		final JFrame frame = new JFrame("GUI");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final JPanel j = new JPanel();
@@ -19,11 +19,7 @@ public class CarGui {
 		j.setBackground(Color.WHITE);
 		j.setLayout(null);
 
-		// final JLabel label = new JLabel("This JPanel uses Absolute
-		// Positioning", SwingConstants.CENTER);
-		// label.setSize(300, 30);
-		// label.setLocation(5, 5);
-
+	
 		final JLabel labelUpperEdge = new JLabel("---------------------------");
 		final JLabel labelLowerEdge = new JLabel("---------------------------");
 		final JLabel labelCar = new JLabel("       C");
