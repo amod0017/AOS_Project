@@ -4,14 +4,12 @@
 package edu.lamar.client;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
-import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import edu.lamar.common.MessageImpl;
@@ -32,11 +30,13 @@ public class CarClient3 extends AbstractClient {
 	private final int timeIrequestedTheBridge = 0;
 	private final String myDirection;
 	private boolean amIonBridge = false;
+	private final MyFrame2 myFrame2;
 
-	public CarClient3(int carId, String direction, String host, int port) {
+	public CarClient3(MyFrame2 myFrame, int carId, String direction, String host, int port) {
 		super(host, port);
 		myCarId = carId;
 		myDirection = direction;
+		myFrame2 = myFrame;
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
 		carAcknowledgementStatusMap.put(3, "NCK");
@@ -113,8 +113,8 @@ public class CarClient3 extends AbstractClient {
 					}
 				}
 				onBridge.remove(Integer.valueOf(myMessage.getCarId()));
+				myFrame2.updateOnBridgeLabel(onBridge.toString());
 				System.out.println("Bridge is free now: " + onBridge);
-
 			} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 				// Acknowledge
 				// if (myCarId != 2) {
@@ -137,6 +137,7 @@ public class CarClient3 extends AbstractClient {
 
 			} else if (myMessage.getMessageType().equals(MessageTypes.OnBridge)) {
 				onBridge.add(myMessage.getCarId());
+				myFrame2.updateOnBridgeLabel(onBridge.toString());
 				System.out.println("On bridge: " + onBridge);
 			}
 		} catch (final Exception e) {
@@ -169,35 +170,54 @@ public class CarClient3 extends AbstractClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// try {
+		// final Scanner scanner = new Scanner(new
+		// InputStreamReader(System.in));
+		// System.out.println("Enter Car Id:");
+		// final int carId = scanner.nextInt();
+		// System.out.println("F for FWD and B for BCK");
+		// final String direction = scanner.next();
+		// final CarClient3 myClient = new CarClient3(carId, direction,
+		// "localhost", 5555);
+		// myClient.openConnection();
+		// System.out.println("Press 1 for bridge request & 2 for bridge
+		// release");
+		// while (true) {
+		// final int option = scanner.nextInt();
+		// if (option == 2) {
+		// // callBridgeReleaseRequest(direction, myClient);
+		// } else if (option == 1) {
+		// // callBridgeRequest(carId, direction, myClient);
+		// } else {
+		// break;
+		// }
+		// }
+		// scanner.close();
+		// } catch (final IOException e) {
+		// e.printStackTrace();
+		// }
+	}
+
+	public void callBridgeRequest(final CarClient3 myClient) {
+		myClient.hadIrequestedTheBridge = true;
 		try {
-			final Scanner scanner = new Scanner(new InputStreamReader(System.in));
-			System.out.println("Enter Car Id:");
-			final int carId = scanner.nextInt();
-			System.out.println("F for FWD and B for BCK");
-			final String direction = scanner.next();
-			final CarClient3 myClient = new CarClient3(carId, direction, "localhost", 5555);
-			myClient.openConnection();
-			System.out.println("Press 1 for bridge request & 2 for bridge release");
-			while (true) {
-				final int option = scanner.nextInt();
-				if (option == 2) {
-					if (!myClient.amIonBridge) {
-						System.out.println("Please request the bridge first");
-					} else {
-						myClient.sendToServer(new MessageImpl(myClient.myCarId, myClient.getCurrentTimeStamp(),
-								direction, MessageTypes.BridgRelease));
-					}
-				} else if (option == 1) {
-					myClient.hadIrequestedTheBridge = true;
-					myClient.sendToServer(new MessageImpl(carId, myClient.getCurrentTimeStamp(), direction,
-							MessageTypes.BridgeRequest));
-				} else {
-					break;
-				}
-			}
-			scanner.close();
+			myClient.sendToServer(new MessageImpl(myClient.myCarId, myClient.getCurrentTimeStamp(),
+					myClient.myDirection, MessageTypes.BridgeRequest));
 		} catch (final IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void callBridgeRelease(final CarClient3 myClient) {
+		if (!myClient.amIonBridge) {
+			System.out.println("Please request the bridge first");
+		} else {
+			try {
+				myClient.sendToServer(new MessageImpl(myClient.myCarId, myClient.getCurrentTimeStamp(),
+						myClient.myDirection, MessageTypes.BridgRelease));
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
