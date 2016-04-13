@@ -99,9 +99,7 @@ public class CarClient extends AbstractClient {
 				resetAckStatus(carAcknowledgementStatusMap);
 				hadIrequestedTheBridge = false;
 			} else {
-				if (!queue.isEmpty()) {
-					queue.remove();
-				}
+				queue.remove();
 			}
 			onBridge = 0;
 			System.out.println("Bridge is free now: " + onBridge);

@@ -20,18 +20,19 @@ import edu.lamar.common.irp.MessageTypes;
  * @author user
  *
  */
-public class CarClient extends AbstractClient {
+public class CarClient2 extends AbstractClient {
 	private boolean hadIrequestedTheBridge = false;
-	private int myCurrentTimeStamp = 0;
+	private int timeStamp = 0;
 	private final Queue<Integer> queue = new LinkedBlockingQueue<Integer>();
 	private final int myCarId;
 	private final Map<Integer, String> carAcknowledgementStatusMap = new HashMap<>();
 	private int onBridge = 0;
-	private int timeIrequestedTheBridge = 0;
+	private final String myDirection;
 
-	public CarClient(int carId, String host, int port) {
+	public CarClient2(int carId, String direction, String host, int port) {
 		super(host, port);
 		myCarId = carId;
+		myDirection = direction;
 		carAcknowledgementStatusMap.put(1, "NCK");
 		carAcknowledgementStatusMap.put(2, "NCK");
 		carAcknowledgementStatusMap.put(3, "NCK");
@@ -41,43 +42,35 @@ public class CarClient extends AbstractClient {
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		final Message myMessage = (Message) msg;
-		// timestamp should be increased after recieving each message.
-		if (myCurrentTimeStamp >= myMessage.getTimeStamp()) {
-			myCurrentTimeStamp = myCurrentTimeStamp + 1;
-		} else {
-			myCurrentTimeStamp = myMessage.getTimeStamp() + 1;
-		}
-		// if(myMessage.getCarId()!= myCarId){
-		// System.out.println("debug me");
-		// }
 		if (myMessage.getMessageType().equals(MessageTypes.BridgeRequest)) {
-			if (hadIrequestedTheBridge) {
-				if (timeIrequestedTheBridge > myMessage.getTimeStamp()) {
-					// myCurrentTimeStamp = myMessage.getTimeStamp() + 1;
+			if (myDirection.equalsIgnoreCase(myMessage.getDirection())) {
+				try {
+					sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			} else if (hadIrequestedTheBridge) {
+				if (timeStamp > myMessage.getTimeStamp()) {
+					timeStamp = myMessage.getTimeStamp() + 1;
 					try {
 						queue.add(myMessage.getCarId());
-						sendToServer(new MessageImpl(myCarId, myCurrentTimeStamp, MessageTypes.Acknowledge));
+						sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
 					} catch (final IOException e) {
 						e.printStackTrace();
 					}
-				} else if (timeIrequestedTheBridge < myMessage.getTimeStamp()) {
-					// this means that the other process had requested the
-					// bridge after me. I should ACK when I am done.
-					queue.add(myMessage.getCarId());
-				} else if (myCarId == myMessage.getCarId()) {
+				} else {
 					// my message. I need to send ACK to me.
 					try {
-						sendToServer(new MessageImpl(myCarId, myCurrentTimeStamp, MessageTypes.Acknowledge));
+						sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
 					} catch (final IOException e) {
 						e.printStackTrace();
 					}
-					// carAcknowledgementStatusMap.put(myCarId, "ACK");
 				}
 			} else {
-				myCurrentTimeStamp = myMessage.getTimeStamp() + 1;
+				timeStamp = myMessage.getTimeStamp() + 1;
 				queue.add(myMessage.getCarId());
 				try {
-					sendToServer(new MessageImpl(myCarId, myCurrentTimeStamp, MessageTypes.Acknowledge));
+					sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
 				} catch (final IOException e) {
 					e.printStackTrace();
 				}
@@ -88,43 +81,31 @@ public class CarClient extends AbstractClient {
 			if (onBridge == myCarId) {
 				// if I am on bridge do these things
 				try {
-					// send ACK to everyone in the queue. BCZ I am done.
-					// for (final Integer integer : queue) {
-					sendToServer(new MessageImpl(myCarId, getCurrentTimeStamp(), MessageTypes.Acknowledge));
-					// }
-					queue.clear();
+					sendToServer(new MessageImpl(myCarId, timeStamp, MessageTypes.Acknowledge));
 				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 				resetAckStatus(carAcknowledgementStatusMap);
 				hadIrequestedTheBridge = false;
 			} else {
-				if (!queue.isEmpty()) {
-					queue.remove();
-				}
+				queue.remove();
 			}
 			onBridge = 0;
-			System.out.println("Bridge is free now: " + onBridge);
 
 		} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
 			// Acknowledge
-			// if (myCarId != 2) {
-			// System.out.println("debug Me");
-			// }
-			if (hadIrequestedTheBridge && onBridge != myCarId) {
-				System.out.println(" My Car Id: " + myCarId + " ACK from Car Id: " + myMessage.getCarId());
+			if (hadIrequestedTheBridge) {
 				carAcknowledgementStatusMap.put(myMessage.getCarId(), "ACK");
-				if (getUpdatedAckStatus(carAcknowledgementStatusMap)) {
-					try {
-						System.out.println("I am on bridge: " + myCarId);
-						sendToServer(new MessageImpl(myCarId, myMessage.getTimeStamp() + 1, MessageTypes.OnBridge));
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
+			}
+			if (getUpdatedAckStatus(carAcknowledgementStatusMap)) {
+				try {
+					System.out.println("I am on bridge: " + myCarId);
+					sendToServer(new MessageImpl(myCarId, myMessage.getTimeStamp() + 1, MessageTypes.OnBridge));
+				} catch (final IOException e) {
+					e.printStackTrace();
 				}
 			}
-
-		} else if (myMessage.getMessageType().equals(MessageTypes.OnBridge)) {
+		} else {
 			onBridge = myMessage.getCarId();
 			System.out.println("On bridge: " + onBridge);
 		}
@@ -147,8 +128,8 @@ public class CarClient extends AbstractClient {
 	}
 
 	private int getCurrentTimeStamp() {
-		myCurrentTimeStamp = myCurrentTimeStamp + 1;
-		return myCurrentTimeStamp;
+		timeStamp = timeStamp + 1;
+		return timeStamp;
 	}
 
 	/**
@@ -159,7 +140,9 @@ public class CarClient extends AbstractClient {
 			final Scanner scanner = new Scanner(new InputStreamReader(System.in));
 			System.out.println("Enter Car Id:");
 			final int carId = scanner.nextInt();
-			final CarClient myClient = new CarClient(carId, "localhost", 5555);
+			System.out.println("F for FWD and B for BCK");
+			final String direction = scanner.next();
+			final CarClient2 myClient = new CarClient2(carId, direction, "localhost", 5555);
 			myClient.openConnection();
 			System.out.println("Press 1 for bridge request & 2 for bridge release");
 			while (true) {
@@ -169,18 +152,16 @@ public class CarClient extends AbstractClient {
 						System.out.println("Please request the bridge first");
 					} else {
 						myClient.sendToServer(new MessageImpl(myClient.myCarId, myClient.getCurrentTimeStamp(),
-								MessageTypes.BridgRelease));
+								direction, MessageTypes.BridgRelease));
 					}
 				} else if (option == 1) {
-					myClient.timeIrequestedTheBridge = myClient.getCurrentTimeStamp();
-					myClient.sendToServer(
-							new MessageImpl(carId, myClient.timeIrequestedTheBridge, MessageTypes.BridgeRequest));
 					myClient.hadIrequestedTheBridge = true;
+					myClient.sendToServer(new MessageImpl(carId, myClient.getCurrentTimeStamp(), direction,
+							MessageTypes.BridgeRequest));
 				} else {
 					break;
 				}
 			}
-
 			scanner.close();
 		} catch (final IOException e) {
 			e.printStackTrace();
