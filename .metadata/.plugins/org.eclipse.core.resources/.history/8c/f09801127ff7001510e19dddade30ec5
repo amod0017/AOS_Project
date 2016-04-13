@@ -1,5 +1,0 @@
-package edu.lamar.common.irp;
-
-public interface Message {
-
-}

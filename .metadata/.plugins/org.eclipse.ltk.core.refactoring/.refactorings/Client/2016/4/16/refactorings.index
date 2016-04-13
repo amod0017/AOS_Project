@@ -1,2 +1,7 @@
 1460258946144	Rename field 'timeStamp'
 1460480950227	Copy compilation unit
+1460521153097	Rename local variable 'carId'
+1460521470708	Extract local variable 'keyListener'
+1460528690257	Extract method 'callBridgeRelease'
+1460528731618	Extract method 'callBridgeRequest'
+1460529793343	Delete element

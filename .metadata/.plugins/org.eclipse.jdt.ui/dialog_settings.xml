@@ -64,10 +64,12 @@
 	<section name="FatJarPackageWizard">
 		<item value="F:\AOS_Project" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
 		<item value="CarClient - Client" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
-		<item value="F:\AOS_Project\server.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="F:\AOS_Project\client_dist.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
 		<item value="1" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="F:\AOS_Project\client_dist.jar"/>
+			<item value="F:\AOS_Project\client_1.jar"/>
 			<item value="F:\AOS_Project\server.jar"/>
 			<item value="F:\AOS_Project\client.jar"/>
 		</list>
