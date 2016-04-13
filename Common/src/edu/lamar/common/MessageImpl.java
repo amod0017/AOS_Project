@@ -31,6 +31,10 @@ public class MessageImpl implements Message {
 		this.messageTypes = messageTypes;
 		this.direction = direction;
 	}
+	
+	public String toString(){  
+		  return "carId " + carId + "timeStamp " + timeStamp + "messageTypes " + messageTypes + "direction " + direction;
+	}
 
 	@Override
 	public int getCarId() {
