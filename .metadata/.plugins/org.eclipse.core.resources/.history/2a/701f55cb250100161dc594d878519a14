@@ -34,11 +34,11 @@ public class MessageImpl implements Message {
 	}
 
 	public String toString() {
-		if (!(direction.equals("")))
-			return "carId: " + carId + " timeStamp: " + timeStamp + " messageTypes: " + messageTypes + " direction "
+		if (direction != null || !direction.equals(""))
+			return "carId " + carId + " timeStamp " + timeStamp + " messageTypes " + messageTypes + " direction "
 					+ direction;
 		else
-			return "carId: " + carId + " timeStamp: " + timeStamp + " messageTypes: " + messageTypes;
+			return "carId " + carId + " timeStamp " + timeStamp + " messageTypes " + messageTypes;
 	}
 
 	@Override

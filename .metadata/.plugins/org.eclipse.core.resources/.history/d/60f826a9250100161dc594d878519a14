@@ -18,27 +18,22 @@ public class MessageImpl implements Message {
 	final int timeStamp;
 	final MessageTypes messageTypes;
 	final String direction;
-
 	public MessageImpl(int carId, int timeStamp, MessageTypes messageTypes) {
 		this.carId = carId;
 		this.timeStamp = timeStamp;
 		this.messageTypes = messageTypes;
 		direction = "";
 	}
-
+	
 	public MessageImpl(int carId, int timeStamp, String direction, MessageTypes messageTypes) {
 		this.carId = carId;
 		this.timeStamp = timeStamp;
 		this.messageTypes = messageTypes;
 		this.direction = direction;
 	}
-
-	public String toString() {
-		if (!(direction.equals("")))
-			return "carId: " + carId + " timeStamp: " + timeStamp + " messageTypes: " + messageTypes + " direction "
-					+ direction;
-		else
-			return "carId: " + carId + " timeStamp: " + timeStamp + " messageTypes: " + messageTypes;
+	
+	public String toString(){  
+		  return "carId " + carId + "timeStamp " + timeStamp + "messageTypes " + messageTypes + "direction " + direction;
 	}
 
 	@Override
@@ -55,9 +50,9 @@ public class MessageImpl implements Message {
 	public MessageTypes getMessageType() {
 		return messageTypes;
 	}
-
+	
 	@Override
-	public String getDirection() {
+	public String getDirection(){
 		return direction;
 	}
 
