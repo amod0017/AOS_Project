@@ -5,8 +5,9 @@ package edu.lamar.client;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
@@ -27,7 +28,7 @@ public class CarClient3 extends AbstractClient {
 	private final Queue<Integer> queue = new LinkedBlockingQueue<Integer>();
 	private final int myCarId;
 	private final Map<Integer, String> carAcknowledgementStatusMap = new HashMap<>();
-	private String onBridge = "";
+	private final List<Integer> onBridge = new ArrayList<Integer>();
 	private final int timeIrequestedTheBridge = 0;
 	private final String myDirection;
 	private boolean amIonBridge = false;
@@ -92,7 +93,7 @@ public class CarClient3 extends AbstractClient {
 			} else if (myMessage.getMessageType().equals(MessageTypes.BridgRelease)) {
 				// remove from queue
 				// should be the top car
-				if (Arrays.asList(onBridge.split(",")).contains(String.valueOf(myCarId))) {
+				if (Integer.valueOf(myMessage.getCarId()).equals(Integer.valueOf(myCarId))) {
 					// if I am on bridge do these things
 					try {
 						// send ACK to everyone in the queue. BCZ I am done.
@@ -111,8 +112,7 @@ public class CarClient3 extends AbstractClient {
 						queue.remove();
 					}
 				}
-				onBridge.replaceAll(String.valueOf(myCarId), "");
-
+				onBridge.remove(Integer.valueOf(myMessage.getCarId()));
 				System.out.println("Bridge is free now: " + onBridge);
 
 			} else if (myMessage.getMessageType().equals(MessageTypes.Acknowledge)) {
@@ -120,7 +120,7 @@ public class CarClient3 extends AbstractClient {
 				// if (myCarId != 2) {
 				// System.out.println("debug Me");
 				// }
-				if (hadIrequestedTheBridge && !onBridge.contains(String.valueOf(myCarId))) {
+				if (hadIrequestedTheBridge && !onBridge.contains(myCarId)) {
 					System.out.println(" My Car Id: " + myCarId + " ACK from Car Id: " + myMessage.getCarId());
 					carAcknowledgementStatusMap.put(myMessage.getCarId(), "ACK");
 					if (getUpdatedAckStatus(carAcknowledgementStatusMap)) {
@@ -136,7 +136,7 @@ public class CarClient3 extends AbstractClient {
 				}
 
 			} else if (myMessage.getMessageType().equals(MessageTypes.OnBridge)) {
-				onBridge = onBridge + "," + String.valueOf(myMessage.getCarId());
+				onBridge.add(myMessage.getCarId());
 				System.out.println("On bridge: " + onBridge);
 			}
 		} catch (final Exception e) {
